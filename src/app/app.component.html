@@ -1,0 +1,49 @@
+<div class="container">
+  <div style="text-align:center">
+    <img
+      alt="Zyllem Logo"
+      src="https://static.wixstatic.com/media/15e42d_92ebfc9a2c37467ba65d2117dc5b9fa4~mv2_d_3850_1775_s_2.png/v1/fill/w_194,h_80,al_c,q_80,usm_0.66_1.00_0.01/15e42d_92ebfc9a2c37467ba65d2117dc5b9fa4~mv2_d_3850_1775_s_2.webp"
+    />
+  </div>
+
+  <h2>Articles</h2>
+
+  <div class="article-video">
+    <ng-container *ngIf="videoArticleHighlight">
+      <h2 class="video-title">{{ videoArticleHighlight.title }}</h2>
+      <article-video-component [article]="videoArticleHighlight"></article-video-component>
+    </ng-container>
+  </div>
+
+  <!-- To put the articles inside this container -->
+  <div class="article-container">
+    <ng-container *ngIf="articles">
+      <div *ngFor="let articleItem of articles" class="article-list-holder">
+        <a [href]="articleItem.url" target="_blank">
+          <h2 class="article-item">{{ articleItem.title }}</h2>
+        </a>
+        <p [innerHTML]="articleItem.description"> </p>
+        <img *ngIf="articleItem.type === 'FEATURED'" [src]="articleItem.featureImgUrl" alt="Featured Image" class="featured-img">
+        <img *ngIf="articleItem.type === 'FEATURED_AD'" [src]="articleItem.adBannerUrl" alt="Featured Ad Banner" class="featured-ad-banner">
+      </div>
+    </ng-container>
+  </div>
+
+
+  <div class="bonus-point-container" style="display: none">
+    <h3>Instructions:</h3>
+    <ul>
+      <li>Fix the build</li>
+      <li>Allow to filter by article type for the list</li>
+      <li>Implement the missing component</li>
+      <li>Follow the expected mock up design (article list should be responsive) <a href="assets/mock-up.png" target="_mockup">see the mock design here</a></li>
+    </ul>
+
+    <h3>Bonus Points:</h3>
+    <ul>
+      <li>Apply a nice template for the article list</li>
+      <li>Get real data from an API to replace our mock data</li>
+      <li>Apply angular router to show an article detail page when you open it from the list</li>
+    </ul>
+  </div> <!--.bonus-point-container -->
+</div>

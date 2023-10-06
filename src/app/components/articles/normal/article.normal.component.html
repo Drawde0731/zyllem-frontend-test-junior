@@ -1,0 +1,7 @@
+
+<div *ngFor="let articleItem of articles">
+  <h2>{{ articleItem.title }}</h2>
+  <p>Published by {{ articleItem.author }} on {{ articleItem.publishedAt | date }}</p>
+  <p [innerHTML]="articleItem.description"></p>
+  <a [href]="articleItem.url" target="_blank">Read more</a>
+</div>
