@@ -13,10 +13,10 @@ export class ArticleNormalComponent implements OnInit {
   constructor(private zyllemApiService: ZyllemApiService) {}
 
   ngOnInit() {
-    this.loadArticles();
+    this.loadNormalArticles();
   }
 
-  private loadArticles() {
+  private loadNormalArticles() {
     this.zyllemApiService.getArticles().subscribe(
       (data) => {
         console.log('Received data:', data); // Check the data here

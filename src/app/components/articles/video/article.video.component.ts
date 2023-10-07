@@ -22,15 +22,19 @@ export class ArticleVideoComponent extends AbstractArticleComponent implements O
     }
 
     ngOnInit() {
-        this.zyllemApiService.getArticles().subscribe(articles => {
+        this.loadVideoArticles();
+    }
 
-            const videoArticle = articles.find(article => article.type === 'VIDEO');
+    private loadVideoArticles() {
+      this.zyllemApiService.getArticles().subscribe(articles => {
+
+        const videoArticle = articles.find(article => article.type === 'VIDEO');
 
 
-            if (videoArticle) {
-                this.article = videoArticle;
-            }
-        });
+        if (videoArticle) {
+            this.article = videoArticle;
+        }
+    });
     }
 
     get safeVideoUrl() {

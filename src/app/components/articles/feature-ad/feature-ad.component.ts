@@ -14,10 +14,10 @@ export class FeatureAdComponent implements OnInit{
   constructor(private zyllemApiService: ZyllemApiService) {}
 
   ngOnInit() {
-    this.loadArticles();
+    this.loadFeatureAdArticles();
   }
 
-  private loadArticles() {
+  private loadFeatureAdArticles() {
     this.zyllemApiService.getArticles().subscribe(
       (data) => {
         console.log('Received data:', data);
