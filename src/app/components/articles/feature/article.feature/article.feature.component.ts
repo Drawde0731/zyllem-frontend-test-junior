@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractArticleComponent } from '../../abstract.article.component';
-import { Article, NormalArticle } from "src/app/model/article";
+import { Article } from "src/app/model/article";
+import { Observable, map } from 'rxjs';
 import { ZyllemApiService } from 'src/app/app.service';
 
 @Component({
@@ -8,26 +8,21 @@ import { ZyllemApiService } from 'src/app/app.service';
   templateUrl: './article.feature.component.html',
   styleUrls: ['./article.feature.component.css']
 })
-export class ArticleFeatureComponent implements OnInit{
+export class ArticleFeatureComponent implements OnInit {
   @Input() article: Article;
-  articles: Article[] = []; // Define an array to store the fetched articles
+  featureArticles$: Observable<Article[]>;
 
-  constructor(private zyllemApiService: ZyllemApiService) {}
+  constructor(public zyllemApiService: ZyllemApiService) {}
 
   ngOnInit() {
-    this.loadFeatureArticles();
+    // Initialize the observable when the component is initialized
+    this.featureArticles$ = this.loadFeatureArticles();
   }
 
-  private loadFeatureArticles() {
-    this.zyllemApiService.getArticles().subscribe(
-      (data) => {
-        console.log('Received data:', data);
-        this.articles = data.filter((article) => article.type === 'FEATURED');
-        console.log('Received:', this.articles);
-      },
-      (error) => {
-        console.error('Error fetching articles:', error);
-      }
+  // Define a function that returns an observable of featured articles
+  public loadFeatureArticles(): Observable<Article[]> {
+    return this.zyllemApiService.getArticles().pipe(
+      map(articles => articles.filter(article => article.type === 'FEATURED'))
     );
   }
 }

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-
-import { ZyllemApiService } from "./app.service";
-import { Article, VideoArticle, NormalArticle, FeaturedArticle, FeaturedAdArticle } from './model/article';
+import { ZyllemApiService } from './app.service';
+import { Article, NormalArticle, FeaturedArticle, FeaturedAdArticle, VideoArticle } from './model/article';
+import { ArticleFeatureComponent } from './components/articles/feature/article.feature/article.feature.component';
+import { FeatureAdComponent } from './components/articles/feature-ad/feature-ad.component';
+import { ArticleVideoComponent } from './components/articles/video/article.video.component';
+import { ArticleNormalComponent } from './components/articles/normal';
 
 @Component({
   selector: 'app-root',
@@ -9,27 +12,38 @@ import { Article, VideoArticle, NormalArticle, FeaturedArticle, FeaturedAdArticl
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-articleItem: any;
+  articleItem: any;
+  articles: (NormalArticle | FeaturedArticle | FeaturedAdArticle)[] = [];
+  videoArticleHighlight: VideoArticle | undefined;
+
   constructor(
-    private readonly apiService: ZyllemApiService,
-  ) { }
-
-  private results: Article[];
-  videoArticleHighlight: VideoArticle;
-
-  get articles() {
-
-    return this.results?.filter(
-      article => article.type === 'NORMAL' || article.type === 'FEATURED' || article.type === 'FEATURED_AD'
-    ) as (NormalArticle | FeaturedArticle | FeaturedAdArticle )[];
-
-  }
+    public apiService: ZyllemApiService,
+    public articleNormalComponent: ArticleNormalComponent,
+    public articleFeatureComponent: ArticleFeatureComponent,
+    public featureAdComponent: FeatureAdComponent
+  ) {}
 
   ngOnInit(): void {
-    this.apiService.getArticles()
-      .subscribe(result => {
-        this.results = result;
-        this.videoArticleHighlight = this.results.find(article => article.type === 'VIDEO') as VideoArticle;
-      });
+    // Load video articles separately
+    // this.articleVideoComponent.loadVideoArticles().subscribe((videoArticle) => {
+    //   this.videoArticleHighlight = videoArticle;
+    // });
+
+    // Load normal articles from ArticleNormalComponent and push them directly
+    this.articleNormalComponent.loadNormalArticles().subscribe((normalArticles) => {
+      this.articles.push(...normalArticles);
+    });
+
+    // Load feature articles and push them directly
+    this.articleFeatureComponent.loadFeatureArticles().subscribe((featureArticles) => {
+      this.articles.push(...featureArticles);
+    });
+
+    // Load feature ad articles and push them directly
+    this.featureAdComponent.loadFeatureAdArticles().subscribe((featureAdArticles) => {
+      this.articles.push(...featureAdArticles);
+
+      console.log(this.articles);
+    });
   }
 }

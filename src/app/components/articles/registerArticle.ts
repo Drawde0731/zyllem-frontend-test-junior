@@ -11,7 +11,7 @@ import { Article } from "src/app/model/article";
 export class ArticleNormalComponent extends AbstractArticleComponent {
   @Input() article: Article;
 
-  constructor(protected zyllemApiService: ZyllemApiService) {
+  constructor(public zyllemApiService: ZyllemApiService) {
     super();
   }
 }

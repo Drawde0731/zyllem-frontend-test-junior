@@ -3,6 +3,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { AbstractArticleComponent } from "../abstract.article.component";
 import { Article } from "src/app/model/article";
 import { ZyllemApiService } from "src/app/app.service";
+import { Observable, map } from "rxjs";
 
 
 @Component({
@@ -11,36 +12,29 @@ import { ZyllemApiService } from "src/app/app.service";
     styleUrls: ['./article.video.component.scss']
 })
 export class ArticleVideoComponent extends AbstractArticleComponent implements OnInit {
+  article: Article;
 
-    article: Article;
+  constructor(
+    private  domSanitize: DomSanitizer,
+    public zyllemApiService: ZyllemApiService
+  ) {
+    super();
+  }
 
-    constructor(
-        private readonly domSanitize: DomSanitizer,
-        private readonly zyllemApiService: ZyllemApiService
-    ) {
-        super();
+  ngOnInit() {
+  }
+
+  // Define a function to load video articles and return an Observable
+  loadVideoArticles(): Observable<Article> {
+    return this.zyllemApiService.getArticles().pipe(
+      map(articles => articles.find(article => article.type === 'VIDEO'))
+    );
+  }
+
+  get safeVideoUrl() {
+    if (this.article) {
+      return this.domSanitize.bypassSecurityTrustResourceUrl(this.article.videoUrl);
     }
-
-    ngOnInit() {
-        this.loadVideoArticles();
-    }
-
-    private loadVideoArticles() {
-      this.zyllemApiService.getArticles().subscribe(articles => {
-
-        const videoArticle = articles.find(article => article.type === 'VIDEO');
-
-
-        if (videoArticle) {
-            this.article = videoArticle;
-        }
-    });
-    }
-
-    get safeVideoUrl() {
-        if (this.article) {
-            return this.domSanitize.bypassSecurityTrustResourceUrl(this.article.videoUrl);
-        }
-        return null;
-    }
+    return null;
+  }
 }

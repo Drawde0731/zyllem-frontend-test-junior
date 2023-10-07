@@ -6,6 +6,7 @@ import { ArticleRendererComponent } from "./article.renderer.component";
 import { ArticleFeatureComponent } from './feature/article.feature/article.feature.component';
 import { ArticleNormalComponent } from "./normal";
 import { FeatureAdComponent } from "src/app/components/articles/feature-ad/feature-ad.component";
+import { ZyllemApiService } from "src/app/app.service";
 
 @NgModule({
     imports: [
@@ -22,6 +23,8 @@ import { FeatureAdComponent } from "src/app/components/articles/feature-ad/featu
     exports: [
         ArticleRendererComponent,
         ...articleEntries
-    ]
+    ],
+    providers: [ZyllemApiService],
+
 })
 export class ArticleModule { }

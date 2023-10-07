@@ -1,33 +1,28 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Article } from '../../../model/article';
 import { ZyllemApiService } from '../../../app.service';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-feature-ad',
   templateUrl: './feature-ad.component.html',
   styleUrls: ['./feature-ad.component.css']
 })
-export class FeatureAdComponent implements OnInit{
+export class FeatureAdComponent implements OnInit {
   @Input() article: Article;
-  articles: Article[] = [];
+  featureAdArticles$: Observable<Article[]>;
 
-  constructor(private zyllemApiService: ZyllemApiService) {}
+  constructor(public zyllemApiService: ZyllemApiService) {}
 
   ngOnInit() {
-    this.loadFeatureAdArticles();
+    // Initialize the observable when the component is initialized
+    this.featureAdArticles$ = this.loadFeatureAdArticles();
   }
 
-  private loadFeatureAdArticles() {
-    this.zyllemApiService.getArticles().subscribe(
-      (data) => {
-        console.log('Received data:', data);
-        this.articles = data.filter((article) => article.type === 'FEATURED_AD');
-        console.log('Received:', this.articles);
-      },
-      (error) => {
-        console.error('Error fetching articles:', error);
-      }
+  // Define a function to load feature ad articles and return an Observable
+  public loadFeatureAdArticles(): Observable<Article[]> {
+    return this.zyllemApiService.getArticles().pipe(
+      map(articles => articles.filter(article => article.type === 'FEATURED_AD'))
     );
   }
 }
-
